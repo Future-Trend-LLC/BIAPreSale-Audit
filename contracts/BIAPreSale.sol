@@ -1,26 +1,23 @@
-
-
 pragma solidity ^0.5.0;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20Detailed.sol";
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/TokenTimelock.sol";
-import "@openzeppelin/contracts/crowdsale/Crowdsale.sol";
-import "@openzeppelin/contracts/crowdsale/validation/TimedCrowdsale.sol";
-import "@openzeppelin/contracts/crowdsale/validation/CappedCrowdsale.sol";
-import "@openzeppelin/contracts/ownership/Ownable.sol";
-import "@openzeppelin/contracts/token/ERC20/ERC20Burnable.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v2.5.1/contracts/token/ERC20/ERC20Detailed.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v2.5.1/contracts/token/ERC20/ERC20.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v2.5.1/contracts/token/ERC20/TokenTimelock.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v2.5.1/contracts/crowdsale/Crowdsale.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v2.5.1/contracts/crowdsale/validation/TimedCrowdsale.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v2.5.1/contracts/crowdsale/validation/CappedCrowdsale.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v2.5.1/contracts/ownership/Ownable.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v2.5.1/contracts/token/ERC20/ERC20Burnable.sol";
 
 contract BIAPreSale is TimedCrowdsale,CappedCrowdsale,Ownable
  {
     mapping(address => uint256) public contributions;
     ERC20Burnable tokenAddress;
-    uint public investorMinCap =   100000000000000000; // 0.1BNB
-    uint public investorHardCap = 3500000000000000000; // 3.5BNB
+    uint constant public investorMinCap =     100000000000000000; // 0.1BNB
+    uint constant public investorHardCap = 350000000000000000000; // 350 BNB
     uint releaseTime1;
     uint releaseTime2;
     uint releaseTime3;
-    uint openTime;
     uint closeTime;
     struct buyerDetails
     {
@@ -53,7 +50,6 @@ contract BIAPreSale is TimedCrowdsale,CappedCrowdsale,Ownable
     releaseTime1    = _releaseTime1;
     releaseTime2    = _releaseTime2;
     releaseTime3    = _releaseTime3;
-    openTime        = _openingTime;
     closeTime       = _closingTime;
   }
   
@@ -90,7 +86,7 @@ contract BIAPreSale is TimedCrowdsale,CappedCrowdsale,Ownable
     
     super._preValidatePurchase(_beneficiary, _weiAmount);
     uint256 _newContribution = contributions[_beneficiary].add(_weiAmount);
-    require(_newContribution >= investorMinCap && _newContribution <= investorHardCap,"Investor CAP in not in a range "); 
+    require(_newContribution >= investorMinCap && _newContribution <= investorHardCap,"Investor CAP is not in a range "); 
        
   }
   function newTokenTimeLock
@@ -130,7 +126,7 @@ contract BIAPreSale is TimedCrowdsale,CappedCrowdsale,Ownable
       wallet3
     );
     buyer.push(newBuyer);
-            
+    emit Created(_beneficiary,wallet1,wallet2,wallet3);     
   }
 
   function _deliverTokens
@@ -157,4 +153,11 @@ contract BIAPreSale is TimedCrowdsale,CappedCrowdsale,Ownable
    address From,
    uint burnValue
  );
+ event Created
+ (
+   address _beneficiery,
+   address _wallet1, 
+   address _wallet2,
+   address _wallet3
+  );
 }
