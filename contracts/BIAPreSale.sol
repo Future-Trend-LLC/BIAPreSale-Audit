@@ -94,7 +94,7 @@ contract BIAPreSale is TimedCrowdsale,CappedCrowdsale,Ownable
     address _beneficiary,
     uint _amount
   )
-  public
+  internal
   {
     // Create new wallet.
     address wallet1 = address(new TokenTimelock(tokenAddress, _beneficiary,releaseTime1));
